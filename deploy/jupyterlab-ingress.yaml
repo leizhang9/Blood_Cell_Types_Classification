@@ -1,0 +1,16 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: jlab-ingress
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`cellai.group02.ami.dedyn.io`)
+      services:
+        - kind: Service
+          name: jlab-service
+          port: 8000
+  tls:
+    certResolver: myresolver

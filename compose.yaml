@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  demo-app:
+    build: app
+    image: gitlab.lrz.de:5005/ldv/teaching/ami/kubernetes_examples/demo:latest
+    volumes:
+      - ami_share:/app/data
+    # flask requires SIGINT to stop gracefully
+    # (default stop signal from Compose is SIGTERM)
+    stop_signal: SIGINT
+    environment:
+      - DATA_DIR=/app/data
+    ports:
+      - 8000:8000
+
+volumes:
+  ami_share:
+    driver_opts:
+      type: cifs
+      o: username=ami,password=YmPAYeALIAnk,vers=3.0
+      device: //10.195.6.13/ami

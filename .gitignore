@@ -1,0 +1,8 @@
+**/.DS_Store
+**/__pycache__
+# web/src/model/checkpoints/
+# web/src/model/inputs/a_learning/
+# web/src/model/inputs/prediction/
+# web/src/model/inputs/training/
+# web/src/model/outputs/checkpoints/
+# web/src/model/outputs/logs/

@@ -1,0 +1,70 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jupyterlab
+  labels:
+    app: jlab
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jlab
+  template:
+    metadata:
+      labels:
+        app: jlab
+    spec:
+      containers:
+      - name: jupyterlab
+        image: gitlab.lrz.de:5005/ldv/teaching/ami/ami2023/projects/group02:latest
+        ports:
+        - containerPort: 8000
+          name: http-web-svc
+        volumeMounts:
+        - mountPath: "/data/ami/"
+          name: share-ami
+        - mountPath: "/data/group/"
+          name: share-group
+        env:
+        - name: DATA_DIR
+          value: "/data/ami"
+        resources:
+          requests:
+            memory: 500Mi
+            cpu: 250m
+          limits:
+            aliyun.com/gpu-mem: 8          
+      imagePullSecrets:
+        - name: kubernetes-example-registry
+      volumes:
+      - name: share-ami
+        persistentVolumeClaim:
+          claimName: pvc-share-ami
+      - name: share-group
+        persistentVolumeClaim:
+          claimName: pvc-share-group          
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: jupyterlab-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jlab-service
+spec:
+  selector:
+    app: jlab
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000

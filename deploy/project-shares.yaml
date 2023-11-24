@@ -1,0 +1,26 @@
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: pvc-share-ami
+spec:
+  accessModes:
+    - ReadOnlyMany
+  resources:
+    requests:
+      storage: 10Gi
+  volumeName: group02-pv-share-ami
+  storageClassName: smb
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: pvc-share-group
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+  volumeName: group02-pv-share-group
+  storageClassName: smb
